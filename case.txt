@@ -1,0 +1,38 @@
+Görev: WordPress için Metin İçi Sözlük (Glossary) Otomasyonu Eklentisi
+Süre: 48 Saat
+
+Senaryo:
+Web sitemizdeki yazılarda (post/page copy) geçen teknik sektörel terimlerin, otomatik olarak Sözlük (Glossary) sayfamızdaki ilgili tanımlara linklenmesini sağlayan bir WordPress eklentisi (plugin) geliştirmeni istiyoruz.
+
+Senden beklentimiz; içerik ekrana basılmadan hemen önce (the_content hook'unu kullanarak) araya giren, metin içindeki terimleri bozmadan <a href="/glossary/terim-slug"> etiketleriyle sarmalayan (wrap eden) temiz bir PHP eklentisi yazmandır.
+
+Girdi (Input) Verileri:
+Testi basitleştirmek adına, eklenti içinde ekstra bir veritabanı tablosu veya Custom Post Type (CPT) kurmana gerek yoktur. Sözlük verisini eklentinin ana dosyasında aşağıdaki gibi basit bir PHP dizisi (array) veya JSON olarak mock'layabilirsin:
+
+PHP
+$glossary_terms = [
+    [ "term" => "Asphalt Shingle", "slug" => "asphalt-shingle" ],
+    [ "term" => "Shingle", "slug" => "shingle-nedir" ],
+    [ "term" => "Flashing", "slug" => "roof-flashing" ]
+];
+
+Beklentiler ve Zorluklar (Edge Cases)
+Bu basit bir str_replace() veya düz bir Regex işlemi değildir. Kodunun aşağıdaki durumlarda (edge cases) hatasız çalışmasını bekliyoruz:
+
+1. HTML Bütünlüğünü Korumak: Eklentin, HTML etiketlerinin içindeki özellikleri (örneğin <img alt="Flashing details"> veya halihazırda linklenmiş <a href="/contact">Asphalt Shingle</a>) kesinlikle değiştirmemeli ve sayfanın DOM yapısını bozmamalıdır. Sadece düz metin (text node) içindeki kelimeler hedeflenmelidir.
+
+2. İç İçe/Çakışan Terimler: Listede hem "Shingle" hem de "Asphalt Shingle" var. Metinde "Asphalt Shingle" geçtiğinde, sistem sadece "Shingle" kısmını ayırıp metni parçalamamalı; en uzun ve doğru eşleşmeyi yapmalıdır.
+
+3. Büyük/Küçük Harf Duyarlılığı: Cümle başındaki "Flashing" ile metin içindeki "flashing" kelimesini yakalamalı, ancak linklerken cümlenin orijinal büyük/küçük harf yapısını (orijinal casing) değiştirmemelidir.
+
+Değerlendirme Kriterleri ve Yapay Zeka Raporu
+Bu projede yapay zeka (ChatGPT, Claude, Copilot vb.) kullanmak serbest ve zorunludur. Ancak kodun kusursuzluğundan ziyade, yukarıdaki "Zorluklar" kısmını AI ile nasıl aştığını görmek istiyoruz.
+
+Projeyi teslim ederken README.md dosyasına bir Yapay Zeka Kullanım Raporu eklemelisin:
+
+- İlk yazdığın prompt nasıldı ve AI'ın verdiği ilk kod hangi "edge case" üzerinde patladı? (Genelde AI ilk aşamada HTML etiketlerini bozan bir kod üretir).
+- HTML'in bozulması sorununu veya çakışan terimler sorununu PHP'de çözmek için (Regex modifikasyonu mu yaptın, yoksa PHP DOMDocument sınıfına mı yöneldin?) AI'a nasıl bir yönlendirme yaptın? (Bu sürece dair prompt geçmişinin linkini veya ekran görüntülerini mutlaka ekle).
+
+Teslimat Şekli:
+- Yazdığın WordPress eklenti klasörünün temiz bir GitHub/GitLab reposu üzerinden paylaşılması.
+- README.md içerisinde projenin nasıl test edilebileceği ve istenen Yapay Zeka Raporu.
